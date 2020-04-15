@@ -10,7 +10,7 @@ import datetime
 
 # 交易日历
 try:
-    f = open('trade_cal.csv', 'r')
+    f = open('./data2local/trade_cal.csv', 'r')
     # trade_cal = pd.read_csv(f, parse_dates=['calendarDate']) # 将“calendarDate”列解析为时间索引
     trade_cal = pd.read_csv(f)
 except FileNotFoundError:
@@ -39,7 +39,7 @@ class Contex:
                                     & (trade_cal.calendarDate <= end_date)\
                                     & (trade_cal.isOpen == 1)]['calendarDate'].values # 执行回测时间范围
 
-
+# 用户需要根据自身需求自定义的全局变量
 cash = 100000.0         # 起始现金
 s_date = '2019-01-01'   # 起始时间
 e_date = '2020-01-01'   # 终止时间
@@ -76,7 +76,7 @@ def attrbute_daterange_history(security, start_date, end_date,
     :return: dataframe格式数据
     """
     try:
-        f = open(security + '.csv', 'r')
+        f = open('./data2local/' + security + '.csv', 'r')
         df = pd.read_csv(f, index_col='date', parse_dates=['date']).loc[start_date:end_date, :]
     except FileNotFoundError:
         df = ts.get_h_data(security, start=start_date, end=end_date, autype=None) # 获取历史无复权数据
@@ -91,7 +91,7 @@ def get_today_data(security):
     """
     today = context.dt.strftime('%Y-%m-%d')
     try: # 行情数据本地化
-        f = open(security + '.csv', 'r')
+        f = open('./data2local/' + security + '.csv', 'r')
         df = pd.read_csv(f, index_col='date', parse_dates=['date']).loc[today:today]
     except FileNotFoundError:
         df = ts.get_h_data(security, start=today, end=today, autype=None) # 获取历史无复权数据
